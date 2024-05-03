@@ -1,0 +1,27 @@
+{% for application in values.applications %}
+apiVersion: backstage.io/v1alpha1
+kind: ${{application.appKind}}
+metadata:
+  name: ${{application.appName}}
+  description: ${{application.appDesc}}
+  tags:
+    - ${{application.appName}}
+    - ${{values.systemType}}
+    - ${{values.projectName}}
+    - ${{values.systemLang}}
+    - ${{values.componentName}}
+  links:
+    - url: ${{application.appBitbucketSourceLocation}}
+      title: Repositorio
+      icon: code
+spec:
+  type: openapi
+  lifecycle: ${{application.appLifeCycle}}
+  owner: ${{values.systemOwner}}
+  system: ${{values.systemName}}
+  definition:
+    $text: ./openapi.yaml
+  # apiConsumedBy:
+  #   - component:default/component-name
+---
+{% endfor %}

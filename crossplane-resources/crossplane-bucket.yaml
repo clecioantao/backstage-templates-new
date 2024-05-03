@@ -1,0 +1,93 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: crossplane-bucket
+  title: GCP - Bucket
+  description: Crossplane Carrefour GCP Bucket
+spec:
+  owner: platform
+  type: service
+  parameters:
+    - title: Informações do Projeto
+      required:
+        - repoName
+        - overlay
+        - projectName
+      properties:
+        projectName:
+          type: string
+          description: "Nome do projeto na GCP br-apps-${appName}-${{overlay}}"
+          maxLength: 63
+          pattern: '^br-apps-.+-(qa|prd|dev)$'
+          ui:autofocus: true
+          ui:help: 'Hint: siga o padrão.'
+        repoName:
+          type: string
+          description: "Nome do repositorio Global Manifest br-apps-${appName}-global-manifest"
+          maxLength: 63
+          pattern: '^br-apps-.+-(global-manifest)$'
+          ui:autofocus: true
+          ui:help: 'Hint: siga o padrão.'
+        overlay:
+          type: string
+          description: "Ambiente"
+          enum:
+            - prd
+    
+    - title: Informações de Recursos
+      required:
+        - resourceDesc
+        - resourceType
+      properties:
+        appName:
+          type: string
+          title: Nome Aplicação
+          description: "Nome da Aplicação"
+          maxLength: 15
+        resourceDesc:
+          type: string
+          title: Descrição do Recurso
+          description: "Uma breve descrição do recurso."
+          maxLength: 50
+        resourceType:
+          type: string
+          title: Tipo do Recurso
+          description: "Categoria do recurso ( bucket )."
+          enum:
+            - bucket
+    
+  steps:
+    - id: bitbucket-ssh-key
+      name: Configurar SSH Bitbucket
+      action: carrefour:shell:execute
+      input:
+        command: >
+          mkdir -p ~/.ssh &&
+          echo "Host bitbucket.org
+            IdentityFile /tmp/bitbucket.key
+            IdentitiesOnly yes
+            StrictHostKeyChecking no" > ~/.ssh/config
+
+    - id: clone-repo
+      name: Clonando Global-Manifest Aplicacao
+      action: git:clone
+      input:
+        repoUrl: git@bitbucket.org:carrefour_ecommerce/${{ parameters.repoName }}.git
+        args: ['--depth','1']
+
+    - id: fetch-catalog-resources
+      name: Criando arquivos Application Global-Manifest...
+      action: fetch:template
+      input:
+        url: ./global-manifest/bucket.yaml
+        targetPath: ./${{ parameters.repoName }}/apps/${{parameters.appName}}
+        values:
+          repoName: ${{ parameters.repoName }}
+          overlay: ${{ parameters.overlay }}
+          projectName: ${{ parameters.projectName }}
+
+    - id: copy-temp-files
+      name: Copy Temporary Files
+      action: carrefour:shell:execute
+      input:
+        command: cp -r . /tmp/teste

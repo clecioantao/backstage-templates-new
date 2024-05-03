@@ -1,0 +1,19 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: ${{values.systemName}}
+  description: Tudo relacionado ao Sistema ${{values.systemName}}
+  tags:
+     - ${{values.systemType}}
+     - ${{values.projectName}}
+     - ${{values.systemLang}}
+     - ${{values.componentName}}
+  links:
+    - url: ${{values.componentGlobalManifestRepoUrl}}
+      title: Repositorio Global Manifest
+      icon: catalog    
+  # annotations:
+  #   backstage.io/techdocs-ref: url:${{values.componentGlobalManifestRepoUrl}}document/
+spec:
+  owner: ${{values.systemOwner}}
+  domain: ${{values.systemDomain}}

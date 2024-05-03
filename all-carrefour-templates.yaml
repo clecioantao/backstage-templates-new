@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: all-carrefour-templates
+  description: All Carrefour Templates
+spec:
+  targets:
+    - ./global-manifest-catalog/global-manifest-catalog.yaml
+    - ./base-steps/base-steps.yaml
+    - ./crossplane-resources/crossplane-bucket.yaml
+    - ./newservice/template.yaml

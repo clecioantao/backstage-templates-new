@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: ${{values.projectName}}
+  description: Catálogo de todos os componentes e recursos do projeto ${{values.projectName}}
+spec:
+  targets:
+    - ./all-components.yaml
+    - ./all-resources.yaml
+    - ./all-systems.yaml

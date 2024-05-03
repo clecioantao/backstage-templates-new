@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: all-resources-br-apps-fiscal-coretax
+  description: All br-apps-fiscal-coretax resources
+spec:
+  targets:
+    - ./resources/resources.yaml

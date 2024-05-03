@@ -1,0 +1,39 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{values.componentName}}
+  description: ${{values.componentDesc}}
+  links:
+    - url: ${{values.componentGlobalManifestRepoUrl}}
+      title: Bitbucket Repository
+      icon: bitbucket
+  tags:
+    - ${{values.systemType}}
+    - ${{values.projectName}}
+    - ${{values.systemLang}}
+    - ${{values.componentName}}
+  annotations:
+    backstage.io/kubernetes-id: ${{values.componentKubernetesId}}
+    backstage.io/kubernetes-namespace: ${{values.componentKubernetesNamespace}}
+    argocd/proxy-url: ${{values.componentArgoCdURL}}
+    datadoghq.com/site: ${{values.componentDatadogHqSite}}
+    datadoghq.com/dashboard-url: ${{values.componentDatadogHqDashboardUrl}}
+    argocd/app-name: ${{values.componentArgoCdAppName}}
+    google.com/cloudbuild-project-slug: ${{values.componentCloudbuildProjectSlug}}
+    google.com/cloudbuild-repo-name: ${{values.componentCloudBuildRepoName}}
+    backstage.io/source-location: ${{values.componentBitbucketSourceLocation}}
+    backstage.io/techdocs-ref: url:${{values.componentTechdosRef}}
+spec:
+  type: ${{values.componentType}}
+  lifecycle: ${{values.componentLifecycle}}
+  owner: ${{values.systemOwner}}
+  system: ${{values.systemName}}
+  # providesApis:
+  #   - api-name
+  dependsOn:
+  {% for resource in values.resources %}
+     - resource:default/${{resource.resourceName}}
+  {% endfor %}
+  # #apiConsumedBy: ['component:']
+  # subcomponentOf: component-name
+  # #consumesApis: ['component:']

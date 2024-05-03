@@ -1,0 +1,509 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: global-manifest-catalog
+  title: Catalogar Serviço Global Manifest
+  description: Adicione uma aplicação (Global-Manifest) ao Catalogo Backstage Carrefour
+spec:
+  owner: platform
+  type: service
+  parameters:
+    - title: Informações BackStage Pre-Requisitos
+      required:
+        - projectCommonName
+        - systemName
+      properties:
+        projectCommonName:
+          title: Nome do Projeto
+          type: string
+          description: "Nome Comum do Projeto (sem prefixos ou sufixos)."
+          enum:
+            - br-apps-fiscal-coretax-dev
+            - br-apps-fiscal-coretax-prd
+            - br-apps-fiscal-coretax-qa
+            - br-apps-gotrack-dev
+            - br-apps-gotrack-prd
+            - br-apps-gotrack-qa
+            - c4-shared-nonprod-vpcs-br
+            - c4-shared-services-nonprod
+            - c4-shared-services-prd
+            - c4-shared-vpcs-br
+        systemName:
+          title: Nome do Sistema
+          type: string
+          description: "Identificação única do sistema ao qual o componente pertence."
+          ui:field: OwnerPicker
+          ui:options:
+            catalogFilter:
+              kind: System
+            defaultKind: System
+            allowArbitraryValues: true
+        systemType:
+          title: Tipo do Sistema
+          type: string
+          description: "Categoria ou tipo do sistema, por exemplo: service, website."
+          enum:
+            - service
+            - website
+        systemLang:
+          title: Linguagem do Sistema
+          type: string
+          description: "Linguagem de programação principal utilizada no desenvolvimento do sistema."
+          enum:
+            - java
+            - node
+            - python
+            - c#
+            - .net
+        systemOwner:
+          title: Proprietário do Sistema
+          type: string
+          description: "Equipe responsável pela manutenção e operação do sistema."
+          ui:field: OwnerPicker
+          ui:options:
+            catalogFilter:
+              - kind: Group
+        systemDomain:
+          title: Domínio do Sistema
+          type: string
+          description: "Domínio ao qual o sistema está associado."
+          ui:field: OwnerPicker
+          ui:options:
+            catalogFilter:
+              - kind: Domain
+
+
+    - title: Informações Bitbucket
+      required:
+        - repoName
+      properties:
+        # repoUrlSsh:
+        #   type: string
+        #   title: Global Manifest SSH URL
+        #   description: "BitBucket URL Global-Manifest para clone via SSH"
+        repoName:
+          type: string
+          title: Global Manifest Repository Name
+          description: "Nome do repositório Global-Manifest"
+          enum:
+            - br-digitalcomm-global-manifest
+            - cuponagem-global-manifest
+            - br-apps-fiscal-coretax-global-manifest
+            - br-apps-gotrack-global-manifest
+            - br-apps-scango-global-manifest
+            - br-apps-gold-global-manifest
+            - br-apps-superapp-global-manifest
+            - c4-shared-vpcs-br-global-manifest
+            - br-apps-unlimitail-global-manifest
+            - br-marketing-global-manifest
+            - br-apps-sams-club-global-manifest
+            - br-apps-data-reliability-global-manifest
+            - br-carrefour-apigateway-global-manifest
+            - br-apps-omnicash-global-manifest
+            - br-apps-monetizacao-global-manifest
+            - br-apps-promocoes-global-manifest
+            - br-carrefour-esb-global-manifest
+            - br-carrefour-telecom-global-manifest
+            - br-apps-campaign-manager-global-manifest
+            - c4-shared-nonprod-vpcs-br-global-manifest
+            - br-apps-customers-sso-global-manifest
+            - br-foundation-example-global-manifest
+            - br-apps-tax-mastersaf-global-manifest
+            - br-apps-icmsreconciliation-global-manifest
+            - sva-global-manifest
+            - br-apps-subscription-global-manifest
+        
+
+    - title: Informações do Componente
+      required:
+        - componentName
+      properties:
+        componentName:
+          type: string
+          title: Nome do Componente
+          description: "Nome único do componente dentro do Backstage"
+          maxLength: 40
+        componentDesc:
+          type: string
+          title: Descricao do Componente
+          description: "Breve descrição do componente, sua função e uso principal"
+          maxLength: 100
+        # componentGlobalManifestRepoUrl:
+        #   type: string
+        #   title: Global Manifest Url
+        #   description: "URL do repositório Global-Manifest no BitBucket para clone via HTTPS"
+        componentKubernetesId:
+          type: string
+          title: Kubernetes Cluster Name
+          description: "Identificador único do Cluster Kubernetes na GCP"
+        componentKubernetesNamespace:
+          type: string
+          title: Kubernetes Namespace
+          description: "Namespace no Kubernetes onde a aplicação será implantada"
+        componentArgoCdURL:
+          type: string
+          title: ArgoCD URL
+          description: "URL para acesso à interface do ArgoCD correspondente ao projeto"
+          enum:
+            - https://argocd-mobile.cloud.carrefour.com.br/
+            - https://argocd-digitalcomm.cloud.carrefour.com.br/
+            - https://argocd-esb.cloud.carrefour.com.br/
+            - https://argocd-shared.cloud.carrefour.com.br
+            - https://argocd-marketing.cloud.carrefour.com.br
+            - https://argocd-scango.cloud.carrefour.com.br
+            - https://argocd-customers.cloud.carrefour.com.br
+            - https://argocd-shared.cloud.carrefour.com.br/
+            - https://argocd-unlimitail.cloud.carrefour.com.br
+            - https://argocd-gold.cloud.carrefour.com.br/
+            - https://argocd-atc.cloud.carrefour.com.br
+            - https://argocd-gotrack.cloud.carrefour.com.br/
+        componentDatadogHqSite:
+          type: string
+          title: Datadog HQ Site
+          description: "URL do site Datadog para monitoramento do componente"
+          enum:
+            - https://obs.cloud.carrefour.com.br
+        componentDatadogHqDashboardUrl:
+          type: string
+          title: Datadog HQ Dashboard URL
+          description: "URL do Dashboard no Datadog específico para o componente"
+          enum:
+            - https://obs.cloud.carrefour.com.br
+        componentArgoCdAppName:
+          type: string
+          title: Nome da Aplicacao no ArgoCD
+          description: "Nome único da aplicação dentro do ArgoCD"
+        componentCloudbuildProjectSlug:
+          type: string
+          title: Cloudbuild Project Slug
+          description: "Identificador único do projeto no Cloudbuild"
+        componentCloudBuildRepoName:
+          type: string
+          title: Cloudbuild Repo Name
+          description: "Nome do repositório no Cloudbuild"
+        componentBitbucketSourceLocation:
+          type: string
+          title: BitBucket Source Location
+          description: "URL da localização do código fonte no BitBucket HTTPS"
+        componentTechdosRef:
+          type: string
+          title: Techdocs Reference
+          description: "Referência aos TechDocs associados ao componente para documentação"
+        componentType:
+          type: string
+          title: Tipo do Componente
+          description: "Tipo do componente, por exemplo: serviço, website, biblioteca"
+          enum:
+            - service
+            - website
+        componentLifecycle:
+          type: string
+          title: Ciclo de Vida do Componente
+          description: "Estágio do ciclo de vida do componente, por exemplo: em desenvolvimento, em produção"
+          enum:
+            - qa
+            - prd
+        # componentOwner:
+        #   type: string
+        #   title: Proprietário do Componente
+        #   description: "Equipe ou indivíduo responsável pelo componente"
+        #   ui:field: OwnerPicker
+        #   ui:options:
+        #     catalogFilter:
+        #       - kind: Group
+        #         spec.type: team
+        # componentSystem:
+        #   type: string
+        #   title: Sistema
+        #   description: "Sistema ao qual o componente pertence ou faz parte"
+        #   ui:field: OwnerPicker
+        #   ui:options:
+        #     catalogFilter:
+        #       - kind: System
+
+    - title: Informações de Recursos
+      properties:
+        resources:
+          title: resources
+          type: array
+          description: "Adicione um ou mais recursos."
+          minItems: 0
+          ui:options:
+            addable: true
+            orderable: true
+            removable: true
+          items:
+            type: object
+            required:
+              - resourceName
+              - resourceDesc
+              - resourceType
+              - resourceConsoleUrl
+            properties:
+              resourceName:
+                type: string
+                title: Nome do Recurso
+                description: "Nome único identificando o recurso."
+                maxLength: 40
+              resourceDesc:
+                type: string
+                title: Descrição do Recurso
+                description: "Uma breve descrição do recurso."
+                maxLength: 50
+              resourceType:
+                type: string
+                title: Tipo do Recurso
+                description: "Categoria do recurso (por exemplo, db-postgres, pubsub, bucket, gke )."
+                enum:
+                  - db-postgres
+                  - pubsub
+                  - bucket
+                  - gke
+              resourceConsoleUrl:
+                type: string
+                title: URL do Console do Recurso
+                description: "URL para acessar o console ou painel de administração do recurso."
+              # resourceOwner:
+              #   type: string
+              #   title: Proprietário do Recurso
+              #   description: "Equipe ou indivíduo responsável pelo recurso."
+              #   ui:field: OwnerPicker
+              #   ui:options:
+              #     catalogFilter:
+              #       - kind: Group
+              #         spec.type: team
+              # resourceSystem:
+              #   type: string
+              #   title: Sistema Associado
+              #   description: "Sistema ao qual o recurso está associado ou faz parte."
+              #   ui:field: OwnerPicker
+              #   ui:options:
+              #     catalogFilter:
+              #       - kind: System
+
+    - title: Informações da Aplicação
+      properties:
+        applications:
+          title: apps
+          type: array
+          description: "Adicione uma ou mais aplicações."
+          minItems: 0
+          ui:options:
+            addable: true
+            orderable: true
+            removable: true
+          items:
+            type: object
+            required:
+              - appKind
+              - appName
+              - appDesc
+              - appBitbucketSourceLocation
+              - appType
+              - appLifeCycle
+            properties:
+              appKind:
+                type: string
+                title: Tipo da Aplicação
+                description: "O tipo de aplicação, como serviço, website, biblioteca, etc."
+                enum:
+                  - API
+              appName:
+                type: string
+                title: Nome da Aplicação
+                description: "Nome único identificando a aplicação."
+                maxLength: 30
+              appDesc:
+                type: string
+                title: Descrição da Aplicação
+                description: "Uma breve descrição da aplicação."
+                maxLength: 50
+              appBitbucketSourceLocation:
+                type: string
+                title: Localização do Código no Bitbucket
+                description: "URL do repositório Bitbucket contendo o código-fonte da aplicação."
+              appType:
+                type: string
+                title: Categoria da Aplicação
+                description: "Categoria da aplicação, baseada em sua função principal ou tecnologia usada."
+                enum:
+                  - backend
+                  - frontend
+              appLifeCycle:
+                type: string
+                title: Ciclo de Vida da Aplicação
+                description: "Estágio atual do ciclo de vida da aplicação (ex: desenvolvimento, produção)."
+                enum:
+                  - qa
+                  - prd
+              # appOwner:
+              #   type: string
+              #   title: Proprietário da Aplicação
+              #   description: "Equipe ou indivíduo responsável pela manutenção e operação da aplicação."
+              #   ui:field: OwnerPicker
+              #   ui:options:
+              #     catalogFilter:
+              #       - kind: Group
+              #         spec.type: team
+              # appSystem:
+              #   type: string
+              #   title: Sistema Associado
+              #   description: "Nome do sistema maior ao qual a aplicação está associada ou faz parte."
+              #   ui:field: OwnerPicker
+              #   ui:options:
+              #     catalogFilter:
+              #       - kind: System
+
+  steps:
+    - id: bitbucket-ssh-key
+      name: Configurar SSH Bitbucket
+      action: carrefour:shell:execute
+      input:
+        command: >
+          mkdir -p ~/.ssh &&
+          echo "Host bitbucket.org
+            IdentityFile /tmp/bitbucket.key
+            IdentitiesOnly yes
+            StrictHostKeyChecking no" > ~/.ssh/config
+
+    - id: bitbucket-user
+      name: Configurar Bitbucket User
+      action: carrefour:shell:execute
+      input:
+        command: >
+          git config --global user.email "br_plataformacloud@carrefour.com" &&
+          git config --global user.name "Backstage"
+
+    - id: clone-repo
+      name: Clone Repository
+      action: git:clone
+      input:
+        #repoUrl: ${{ parameters.repoUrlSsh }}
+        repoUrl: git@bitbucket.org:carrefour_ecommerce/${{ parameters.repoName }}.git
+        args: ['--depth','1']
+
+    - id: fetch-catalog-resources
+      name: Catalogando Recursos...
+      action: fetch:template
+      input:
+        url: ./backstage
+        targetPath: ./${{ parameters.repoName }}/backstage/
+        values:
+          projectCommonName: ${{ parameters.projectCommonName }}
+          systemName: ${{ parameters.systemName | parseEntityRef | pick('name') }}
+          systemType: ${{ parameters.systemType }}
+          systemLang: ${{ parameters.systemLang }}
+          systemOwner: ${{ parameters.systemOwner | parseEntityRef | pick('name') }}
+          systemDomain: ${{ parameters.systemDomain | parseEntityRef | pick('name') }}
+          repoUrlSsh: git@bitbucket.org:carrefour_ecommerce/${{ parameters.repoName }}.git
+          componentName: ${{ parameters.componentName }}
+          componentDesc: ${{ parameters.componentDesc }}
+          componentGlobalManifestRepoUrl: https://bitbucket.org/carrefour_ecommerce/${{parameters.repoName}}/src/main/
+          componentKubernetesId: ${{ parameters.componentKubernetesId }}
+          componentKubernetesNamespace: ${{ parameters.componentKubernetesNamespace }}
+          componentArgoCdURL: ${{ parameters.componentArgoCdURL }}
+          componentDatadogHqSite: ${{ parameters.componentDatadogHqSite }}
+          componentDatadogHqDashboardUrl: ${{ parameters.componentDatadogHqDashboardUrl }}
+          componentArgoCdAppName: ${{ parameters.componentArgoCdAppName }}
+          componentCloudbuildProjectSlug: ${{ parameters.componentCloudbuildProjectSlug }}
+          componentCloudBuildRepoName: ${{ parameters.componentCloudBuildRepoName }}
+          componentBitbucketSourceLocation: ${{ parameters.componentBitbucketSourceLocation }}
+          componentTechdosRef: ${{ parameters.componentTechdosRef }}
+          componentType: ${{ parameters.componentType }}
+          componentLifecycle: ${{ parameters.componentLifecycle }}
+          # componentOwner: ${{ parameters.componentOwner | parseEntityRef | pick('name') }}
+          # componentSystem: ${{ parameters.componentSystem | parseEntityRef | pick('name') }}
+          resources: ${{ parameters.resources }}
+          applications: ${{ parameters.applications }}
+
+    - id: fetch-catalog-apps
+      name: Catalogando Aplicações...
+      action: fetch:template
+      input:
+        url: ./apps/catalog/
+        targetPath: ./${{ parameters.repoName }}/apps/catalog/
+        values:
+          projectCommonName: ${{ parameters.projectCommonName }}
+          systemName: ${{ parameters.systemName | parseEntityRef | pick('name') }}
+          systemType: ${{ parameters.systemType }}
+          systemLang: ${{ parameters.systemLang }}
+          systemOwner: ${{ parameters.systemOwner | parseEntityRef | pick('name') }}
+          systemDomain: ${{ parameters.systemDomain | parseEntityRef | pick('name') }}
+          repoUrlSsh: git@bitbucket.org:carrefour_ecommerce/${{ parameters.repoName }}.git
+          componentName: ${{ parameters.componentName }}
+          componentDesc: ${{ parameters.componentDesc }}
+          componentGlobalManifestRepoUrl: https://bitbucket.org/carrefour_ecommerce/${{parameters.repoName}}/src/main/
+          componentKubernetesId: ${{ parameters.componentKubernetesId }}
+          componentKubernetesNamespace: ${{ parameters.componentKubernetesNamespace }}
+          componentArgoCdURL: ${{ parameters.componentArgoCdURL }}
+          componentDatadogHqSite: ${{ parameters.componentDatadogHqSite }}
+          componentDatadogHqDashboardUrl: ${{ parameters.componentDatadogHqDashboardUrl }}
+          componentArgoCdAppName: ${{ parameters.componentArgoCdAppName }}
+          componentCloudbuildProjectSlug: ${{ parameters.componentCloudbuildProjectSlug }}
+          componentCloudBuildRepoName: ${{ parameters.componentCloudBuildRepoName }}
+          componentBitbucketSourceLocation: ${{ parameters.componentBitbucketSourceLocation }}
+          componentTechdosRef: ${{ parameters.componentTechdosRef }}
+          componentType: ${{ parameters.componentType }}
+          componentLifecycle: ${{ parameters.componentLifecycle }}
+          # componentOwner: ${{ parameters.componentOwner | parseEntityRef | pick('name') }}
+          # componentSystem: ${{ parameters.componentSystem | parseEntityRef | pick('name') }}
+          resources: ${{ parameters.resources }}
+          applications: ${{ parameters.applications }}
+
+    - id: git-status
+      name: Git Status
+      action: git
+      input:
+        command: status
+        workingDirectory: ${{ parameters.repoName }}
+
+    - id: git-add
+      name: Git Add
+      action: git
+      input:
+        command: add
+        workingDirectory: ${{ parameters.repoName }}
+        args: ['--all']
+
+    - id: git-commit
+      name: Git Commit Changes
+      action: git
+      input:
+        command: commit
+        workingDirectory: ${{ parameters.repoName }}
+        args: ['-m','Backstage: Catalog Info']
+
+    - id: git-push
+      name: Git Push Changes
+      action: git
+      input:
+        command: push
+        workingDirectory: ${{ parameters.repoName }}
+        args: ['origin','main']
+
+    - id: show-main-catalog
+      name: Arquivo main.yaml criado...
+      action: carrefour:shell:execute
+      input:
+        command: >
+          echo "https://bitbucket.org/carrefour_ecommerce/${{ parameters.repoName }}/src/main/backstage/main.yaml"
+
+    # - id: catalog-register
+    #   name: Registrando no Catalogo
+    #   action: catalog:register
+    #   input:
+    #     repoContentsUrl: https://bitbucket.org/carrefour_ecommerce/${{parameters.repoName}}/src/main/
+    #     catalogInfoPath: ./backstage/main.yaml
+
+    # - id: copy-temp-files
+    #   name: Copy Temporary Files
+    #   action: carrefour:shell:execute
+    #   input:
+    #     command: cp -r . /tmp/teste
+
+    # - id: show-files
+    #   name: List Dir Files
+    #   action: carrefour:shell:execute
+    #   input:
+    #     command: >
+    #       ls -lart ${{ parameters.repoName }}/apps/${{ parameters.appName }}

@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: all-resources-${{values.projectName}}
+  description: All ${{values.projectName}} resources
+spec:
+  targets:
+    - ./resources/resources.yaml

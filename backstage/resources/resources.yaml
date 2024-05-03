@@ -1,0 +1,34 @@
+
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: fiscal-coretax-db
+  description: Database for fiscal coretax
+  links:
+    - url: https://console.cloud.google.com/databases/fiscal-coretax-db
+      title: GCP Console URL
+      icon: dashboard
+  tags:
+    - db-postgres
+spec:
+  type: db-postgres
+  owner: team-fiscal-coretax
+  system: br-apps-fiscal-coretax-system
+---
+
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: fiscal-coretax-bucket
+  description: Storage bucket for fiscal coretax
+  links:
+    - url: https://console.cloud.google.com/storage/fiscal-coretax-bucket
+      title: GCP Console URL
+      icon: dashboard
+  tags:
+    - bucket
+spec:
+  type: bucket
+  owner: team-fiscal-coretax
+  system: br-apps-fiscal-coretax-system
+---

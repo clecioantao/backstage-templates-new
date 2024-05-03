@@ -1,0 +1,18 @@
+{% for resource in values.resources %}
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ${{resource.resourceName}}
+  description: ${{resource.resourceDesc}}
+  links:
+    - url: ${{resource.resourceConsoleUrl}}
+      title: GCP Console URL
+      icon: dashboard
+  tags:
+    - ${{resource.resourceType}}
+spec:
+  type: ${{resource.resourceType}}
+  owner: ${{values.systemOwner}}
+  system: ${{values.systemName}}
+---
+{% endfor %}
